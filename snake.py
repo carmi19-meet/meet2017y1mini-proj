@@ -9,7 +9,7 @@ turtle.setup(SIZE_X, SIZE_Y)
 turtle.penup()
 
 SQUARE_SIZE=20
-START_LENGTH=5
+START_LENGTH=7
 
 pos_list = []
 stamp_list = []
@@ -18,7 +18,7 @@ food_stamps = []
 
 snake = turtle.clone()
 snake.shape('square')
-
+snake.color('blue')
 turtle.hideturtle()
 
 for i in range(START_LENGTH):
@@ -48,32 +48,28 @@ DOWN = 2
 RIGHT = 3
 
 direction = UP
-UP_EDGE = 250
-DOWN_EDGE = -250
+TOP_EDGE = 250
+BOTTOM_EDGE = -250
 RIGHT_EDGE = 400
 LEFT_EDGE = -400
 def up():
     global direction
     direction=UP
-    move_snake()
     print('you pressed up key')
 
 def down():
     global direction
     direction=DOWN
-    move_snake()
     print('you pressed down key')
 
 def right():
     global direction
     direction=RIGHT
-    move_snake()
     print('you pressed right key')
 
 def left():
     global direction
     direction=LEFT
-    move_snake()
     print('you pressed left key')
 
 turtle.onkeypress(up, UP_ARROW)
@@ -104,6 +100,16 @@ def move_snake():
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp) ########special place
+    global food_stamps, food_pos
+    if snake.pos() in food_pos:
+        food_ind = food_pos.index(snake.pos())
+        food.clearstamp(food_stamps[food_ind])
+
+        food_pos.pop(food_ind)
+        food_stamps.pop(food_ind)
+        print('You have eaten the food!')
+        make_food()
+        
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
     pos_list.pop(0)
@@ -115,5 +121,37 @@ def move_snake():
     if new_x_pos>= RIGHT_EDGE:
         print('You hit the right edge! Game over')
         quit()
+    if new_x_pos<= LEFT_EDGE:
+        print('You hit the left edge! game over')
+        quit()
+    if new_y_pos>= TOP_EDGE:
+        print('You hit the top wall! game over')
+        quit()
+    if new_y_pos<= BOTTOM_EDGE:
+        print('You hit the bottom wall! game over')
+        quit()
+    turtle.ontimer(move_snake,TIME_STEP)
+move_snake()
     
-    
+#turtle.register_shape('circle')    
+food = turtle.clone()
+food.shape('circle')
+food_pos = [(100,100), (-100,100), (-100,-100), (100, -100)]
+food_stamps = []
+for i in food_pos:
+    food.goto(i)
+    f1 = food.stamp()
+    food_stamps.append(f1)
+def make_food():
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+
+    food_x = random.randint(min_x, max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y, max_y)*SQUARE_SIZE
+    food_x_y = (food_x, food_y)
+    food.goto(food_x, food_y)
+    food_pos.append(food_x_y)
+    f2 = food.stamp()
+    food_stamps.append(f2)
