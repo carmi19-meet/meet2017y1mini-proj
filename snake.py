@@ -9,7 +9,7 @@ turtle.setup(SIZE_X, SIZE_Y)
 turtle.penup()
 
 SQUARE_SIZE=20
-START_LENGTH=7
+START_LENGTH=1
 
 pos_list = []
 stamp_list = []
@@ -100,11 +100,14 @@ def move_snake():
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp) ########special place
+
     global food_stamps, food_pos
     if snake.pos() in food_pos:
         food_ind = food_pos.index(snake.pos())
         food.clearstamp(food_stamps[food_ind])
-
+        w = snake.stamp()
+        stamp_list.append(w)
+        pos_list.append(w)
         food_pos.pop(food_ind)
         food_stamps.pop(food_ind)
         print('You have eaten the food!')
@@ -129,6 +132,10 @@ def move_snake():
         quit()
     if new_y_pos<= BOTTOM_EDGE:
         print('You hit the bottom wall! game over')
+        quit()
+    #
+    if snake.pos() in pos_list[0:-2]:
+        print('You hit yourself! game over')
         quit()
     turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
@@ -155,3 +162,4 @@ def make_food():
     food_pos.append(food_x_y)
     f2 = food.stamp()
     food_stamps.append(f2)
+
