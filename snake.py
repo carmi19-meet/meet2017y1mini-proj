@@ -7,6 +7,20 @@ SIZE_X=800
 SIZE_Y=500
 turtle.setup(SIZE_X, SIZE_Y)
 turtle.penup()
+box_x = 700
+box_y = 400
+box = turtle.clone()
+box.penup()
+box.speed = 800
+box.goto(-350, 0)
+box.pendown()
+box.goto(-350, 200)
+box.goto(350, 200)
+box.goto(350, -200)
+box.goto(-350, -200)
+box.goto(-350, 0)
+box.hidebox()
+
 
 SQUARE_SIZE=20
 START_LENGTH=1
@@ -18,8 +32,13 @@ food_stamps = []
 
 snake = turtle.clone()
 snake.shape('square')
-snake.color('blue')
 turtle.hideturtle()
+turtle.colormode(255)
+def random_color():
+    rgbl=[255,0,0]
+    random.shuffle(rgbl)
+    return tuple(rgbl)
+snake.color(random_color())
 
 for i in range(START_LENGTH):
     x_pos=snake.pos()[0]
@@ -48,10 +67,10 @@ DOWN = 2
 RIGHT = 3
 
 direction = UP
-TOP_EDGE = 250
-BOTTOM_EDGE = -250
-RIGHT_EDGE = 400
-LEFT_EDGE = -400
+TOP_EDGE = 200
+BOTTOM_EDGE = -200
+RIGHT_EDGE = 350
+LEFT_EDGE = -350
 def up():
     global direction
     direction=UP
@@ -71,7 +90,7 @@ def left():
     global direction
     direction=LEFT
     print('you pressed left key')
-
+    
 turtle.onkeypress(up, UP_ARROW)
 turtle.onkeypress(down, DOWN_ARROW)
 turtle.onkeypress(left, LEFT_ARROW)
@@ -111,6 +130,7 @@ def move_snake():
         food_pos.pop(food_ind)
         food_stamps.pop(food_ind)
         print('You have eaten the food!')
+        
         make_food()
         
     old_stamp = stamp_list.pop(0)
@@ -150,10 +170,10 @@ for i in food_pos:
     f1 = food.stamp()
     food_stamps.append(f1)
 def make_food():
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_x=-int(box_x/2/SQUARE_SIZE)+1
+    max_x=int(box_x/2/SQUARE_SIZE)-1
+    min_y=-int(box_y/2/SQUARE_SIZE)-1
+    max_y=int(box_y/2/SQUARE_SIZE)+1
 
     food_x = random.randint(min_x, max_x)*SQUARE_SIZE
     food_y = random.randint(min_y, max_y)*SQUARE_SIZE
