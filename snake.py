@@ -2,7 +2,7 @@ import turtle
 import random
 
 turtle.tracer(1, 0)
-
+turtle.bgcolor('orange')
 SIZE_X=800
 SIZE_Y=500
 turtle.setup(SIZE_X, SIZE_Y)
@@ -106,7 +106,7 @@ def move_snake():
         rgbl=[255,0,0]
         random.shuffle(rgbl)
         return tuple(rgbl)
-    snake.fillcolor(random_color())
+    snake.color(random_color())
 
     if direction==RIGHT:
         snake.goto(x_pos + SQUARE_SIZE, y_pos)
